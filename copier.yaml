@@ -1,0 +1,4 @@
+_subdirectory: template
+_tasks:
+    - invoke migrate-test-charm
+    - invoke remove-tasks
