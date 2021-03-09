@@ -45,3 +45,10 @@ def charm_dir(session_folder):
     shutil.copytree(tmp_dir, charm_dir)
     shutil.rmtree(tmp_dir)
     return charm_dir
+
+@pytest.fixture()
+def answers():
+    """Default answers data for copier"""
+    answers = {}
+    answers["charm_name"] = "test-charm"
+    return answers

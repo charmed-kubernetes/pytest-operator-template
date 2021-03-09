@@ -7,9 +7,9 @@ class TestTemplate:
         """Check the fixtures"""
         assert src_template.exists()
 
-    def test_clone(self, src_template, charm_dir):
+    def test_clone(self, src_template, charm_dir, answers):
         """Verify the template clones into a charm"""
-        copier.copy(str(src_template), str(charm_dir))
+        copier.copy(str(src_template), str(charm_dir), data=answers)
         test_data = charm_dir / "tests" / "data"
         test_unit = charm_dir / "tests" / "unit"
         test_integration = charm_dir / "tests" / "integration"
@@ -39,3 +39,11 @@ class TestTemplate:
         tox_update = tox_file.read_text()
         assert tox_original != tox_modified
         assert tox_original == tox_update
+
+    def test_integration_test_contents(self, charm_dir, answers):
+        """Verify the template is processed correctly"""
+        test_file = charm_dir / "tests" / "integration" / "test_charm.py"
+        assert test_file.exists()
+        contents = test_file.read_text()
+        assert "class IntegrationTest" in contents
+        assert f'"{answers["charm_name"]}": "Active and running"' in contents

@@ -2,3 +2,6 @@ _subdirectory: template
 _tasks:
     - invoke migrate-test-charm
     - invoke remove-tasks
+charm_name:
+    type: str
+    help: "The name of the charm, as used in metadata.yaml"
