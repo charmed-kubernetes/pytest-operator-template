@@ -4,6 +4,7 @@ _tasks:
     # - invoke migrate-test-charm
     - invoke check-yaml
     - "chmod +x src/charm.py"
+    - invoke remove-unused-files
     - invoke remove-tasks
 _skip_if_exists:
     - src/charm.py

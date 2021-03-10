@@ -45,3 +45,15 @@ def check_yaml(c):
                 if ":" in line:
                     line = line[1:]  # Remove the comment prefix
                 print(line, end="")
+
+
+@task
+def remove_unused_files(c):
+    """Remove files that aren't used form the standard template"""
+    files = []
+    run_tests = Path("run_tests")
+    files.append(run_tests)
+    requirements_dev = Path("requirements-dev.txt")
+    files.append(requirements_dev)
+    for file in files:
+        file.unlink()
