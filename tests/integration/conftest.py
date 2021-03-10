@@ -3,6 +3,7 @@ import subprocess
 from pathlib import Path
 
 import yaml
+
 import pytest
 
 
@@ -42,7 +43,9 @@ def charm_dir(session_folder):
     charm_dir = session_folder / "charm-dir"
     tmp_dir = Path("charm-dir")
     tmp_dir.mkdir()
-    subprocess.check_call(["charmcraft", "init"], cwd=tmp_dir)
+    subprocess.check_call(
+        ["charmcraft", "init", "--author", "Pytest Conftest"], cwd=tmp_dir
+    )
     shutil.copytree(tmp_dir, charm_dir)
     shutil.rmtree(tmp_dir)
     return charm_dir
@@ -70,5 +73,6 @@ def metadata(charm_dir):
             """Set the series in the metadata"""
             self.metadata["series"] = series
             self.metadata_file.write_text(yaml.dump(self.metadata))
+
     metadata = Metadata()
     return metadata
