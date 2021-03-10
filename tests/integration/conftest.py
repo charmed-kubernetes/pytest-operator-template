@@ -2,6 +2,8 @@ import shutil
 import subprocess
 from pathlib import Path
 
+import yaml
+
 import pytest
 
 
@@ -41,14 +43,36 @@ def charm_dir(session_folder):
     charm_dir = session_folder / "charm-dir"
     tmp_dir = Path("charm-dir")
     tmp_dir.mkdir()
-    subprocess.check_call(["charmcraft", "init"], cwd=tmp_dir)
+    subprocess.check_call(
+        ["charmcraft", "init", "--author", "Pytest Conftest"], cwd=tmp_dir
+    )
     shutil.copytree(tmp_dir, charm_dir)
     shutil.rmtree(tmp_dir)
     return charm_dir
+
 
 @pytest.fixture()
 def answers():
     """Default answers data for copier"""
     answers = {}
-    answers["charm_name"] = "test-charm"
+    # answers["charm_name"] = "template-test-charm"
+    answers["class_name"] = "TemplateTestCharm"
+    # Note "TestCharm" can't be used, that's the name of the deafult unit test class
     return answers
+
+
+@pytest.fixture()
+def metadata(charm_dir):
+    """Access metadata for the test charm"""
+
+    class Metadata:
+        metadata_file = charm_dir / "metadata.yaml"
+        metadata = yaml.safe_load(metadata_file.read_text())
+
+        def set_series(self, series):
+            """Set the series in the metadata"""
+            self.metadata["series"] = series
+            self.metadata_file.write_text(yaml.dump(self.metadata))
+
+    metadata = Metadata()
+    return metadata
