@@ -22,9 +22,9 @@ class IntegrationTests(OperatorTest):
 
     async def test_status_messages(self):
         """ Validate that the status messages are correct. """
-        expected_messages = {
-            "[[_copier_answers["charm_name"]]]": "Active and running",
-        }
+        expected_messages = {}
+        for series in self.meta["series"]:
+            expected_messages[series] = "Active and running"
         for app, message in expected_messages.items():
             for unit in self.model.applications[app].units:
                 assert unit.workload_status_message == message

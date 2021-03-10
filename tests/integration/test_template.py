@@ -29,6 +29,7 @@ class TestTemplate:
     #     assert not test_charm.exists()
     #     assert test_charm_expected.exists()
 
+    # Removed for easier testing
     # def test_tasks_removed(self, charm_dir):
     #     """Verify copiers tasks.py is removed"""
     #     tasks = charm_dir / "tasks.py"
@@ -51,7 +52,6 @@ class TestTemplate:
         assert test_file.exists()
         contents = test_file.read_text()
         assert "class IntegrationTest" in contents
-        assert f'"{answers["charm_name"]}": "Active and running"' in contents
 
     def test_run_lint(self, charm_dir):
         """Try running the templated integration test"""
@@ -61,7 +61,7 @@ class TestTemplate:
         """Try running the templated integration test"""
         subprocess.check_call(["tox", "-e", "unit"], cwd=charm_dir)
 
-    # def test_run_integration(self, charm_dir, metadata):
-    #     """Try running the templated integration test"""
-    #     metadata.set_series(["focal"])
-    #     subprocess.check_call(["tox", "-e", "integration"], cwd=charm_dir)
+    def test_run_integration(self, charm_dir, metadata):
+        """Try running the templated integration test"""
+        metadata.set_series(["focal"])
+        subprocess.check_call(["tox", "-e", "integration"], cwd=charm_dir)

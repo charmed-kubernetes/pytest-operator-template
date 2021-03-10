@@ -33,7 +33,7 @@ class [[ class_name ]](CharmBase):
         self._stored.set_default(things=[])
 
     def _on_install(self, _):
-        self.unit.status = ActiveStatus()
+        self.unit.status = ActiveStatus("Active and running")
 
     def _on_config_changed(self, _):
         # Note: you need to uncomment the example in the config.yaml file for this to work (ensure
