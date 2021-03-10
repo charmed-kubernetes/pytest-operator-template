@@ -11,3 +11,8 @@ _skip_if_exists:
 class_name:
     type: str
     help: "The class name for the charm, must be a valid python class name"
+charm_type:
+    choices:
+        metal: machine
+        container: container
+        default: machine

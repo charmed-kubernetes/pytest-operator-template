@@ -55,5 +55,8 @@ def remove_unused_files(c):
     files.append(run_tests)
     requirements_dev = Path("requirements-dev.txt")
     files.append(requirements_dev)
+    # This can be used and moved instead of deleted when using the upstream template
+    test_charm = Path("tests/test_charm.py")
+    files.append(test_charm)
     for file in files:
         file.unlink()
