@@ -52,7 +52,7 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install tox
-          snap install charmcraft --beta
+          sudo snap install charmcraft --beta
       - name: Setup operator environment
         uses: charmed-kubernetes/actions-operator@master
       - name: Run test
