@@ -45,22 +45,3 @@ def check_yaml(c):
                 if ":" in line:
                     line = line[1:]  # Remove the comment prefix
                 print(line, end="")
-
-
-@task
-def post_process_templates(c):
-    """Render Jinja templates with metadata information available"""
-    pass
-
-
-# @task
-# def check_config(c):
-#     """Make sure at least one config parameter exists, so Harness can load"""
-#     config_file = Path("config.yaml")
-#     config = yaml.safe_load(config_file.read_text())
-#     if not config or not len(config):
-#         config = {"options": {"test-option": {}}}
-#         config["options"]["test-option"]["deafult"] = "test option value"
-#         config["options"]["test-option"]["type"] = "string"
-#         with config_file.open("a") as f:
-#             f.write(yaml.dump(config))

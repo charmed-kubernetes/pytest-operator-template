@@ -29,11 +29,10 @@ class TestTemplate:
     #     assert not test_charm.exists()
     #     assert test_charm_expected.exists()
 
-    # Removed for easier testing
-    # def test_tasks_removed(self, charm_dir):
-    #     """Verify copiers tasks.py is removed"""
-    #     tasks = charm_dir / "tasks.py"
-    #     assert not tasks.exists()
+    def test_tasks_removed(self, charm_dir):
+        """Verify copiers tasks.py is removed"""
+        tasks = charm_dir / "tasks.py"
+        assert not tasks.exists()
 
     def test_update(self, src_template, charm_dir):
         """Verify update restores changes"""
