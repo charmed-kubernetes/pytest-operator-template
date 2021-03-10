@@ -23,7 +23,8 @@ def migrate_test_charm(c):
 def remove_tasks(c):
     """Removes the invoke tasks"""
     task = Path("tasks.py")
-    task.unlink()
+    if task.exists():
+        task.unlink()
 
 
 @task
@@ -59,4 +60,5 @@ def remove_unused_files(c):
     test_charm = Path("tests/test_charm.py")
     files.append(test_charm)
     for file in files:
-        file.unlink()
+        if file.exists():
+            file.unlink()
