@@ -15,4 +15,4 @@ charm_type:
     choices:
         metal: machine
         container: container
-        default: machine
+    default: machine

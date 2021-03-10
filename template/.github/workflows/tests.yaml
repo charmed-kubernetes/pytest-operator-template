@@ -1,3 +1,4 @@
+[% if _copier_answers["charm_type"] == "machine" %]
 name: Test Suite
 on: [pull_request]
 
@@ -38,7 +39,6 @@ jobs:
           pip install tox
       - name: Run test
         run: tox -e unit
-[% if _copier_answers["charm_type"] == "machine" %]
   integration-test:
     name: Integration test with LXD
     runs-on: ubuntu-latest
