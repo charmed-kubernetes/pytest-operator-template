@@ -55,9 +55,9 @@ def charm_dir(session_folder):
 def answers():
     """Default answers data for copier"""
     answers = {}
-    # answers["charm_name"] = "template-test-charm"
     answers["class_name"] = "TemplateTestCharm"
     # Note "TestCharm" can't be used, that's the name of the deafult unit test class
+    answers["charm_type"] = "machine"
     return answers
 
 
