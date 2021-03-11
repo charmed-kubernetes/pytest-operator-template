@@ -65,7 +65,7 @@ def answers(pytestconfig):
 def set_metadata(charm_dir, pytestconfig, metadata):
     """Set the metadata for the charm type"""
     if pytestconfig.getoption("-m") == "machine":
-        metadata.set_series("focal")
+        metadata.set_series(["focal"])
 
 
 @pytest.fixture(scope="session")
