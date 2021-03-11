@@ -1,9 +1,11 @@
 import subprocess
 
 import copier
+import pytest
 
 
-class TestTemplate:
+@pytest.mark.machine
+class TestMachine:
     def test_pytest(self, src_template):
         """Check the fixtures"""
         assert src_template.exists()
@@ -62,5 +64,10 @@ class TestTemplate:
 
     def test_run_integration(self, charm_dir, metadata):
         """Try running the templated integration test"""
-        metadata.set_series(["focal"])
+        # metadata.set_series(["focal"])
         subprocess.check_call(["tox", "-e", "integration"], cwd=charm_dir)
+
+
+@pytest.mark.container
+class TestContainer(TestMachine):
+    pass

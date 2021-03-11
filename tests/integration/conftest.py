@@ -52,16 +52,23 @@ def charm_dir(session_folder):
 
 
 @pytest.fixture()
-def answers():
+def answers(pytestconfig):
     """Default answers data for copier"""
     answers = {}
     answers["class_name"] = "TemplateTestCharm"
     # Note "TestCharm" can't be used, that's the name of the deafult unit test class
-    answers["charm_type"] = "machine"
+    answers["charm_type"] = pytestconfig.getoption("-m")
     return answers
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session", autouse=True)
+def set_metadata(charm_dir, pytestconfig, metadata):
+    """Set the metadata for the charm type"""
+    if pytestconfig.getoption("-m") == "machine":
+        metadata.set_series("focal")
+
+
+@pytest.fixture(scope="session")
 def metadata(charm_dir):
     """Access metadata for the test charm"""
 
