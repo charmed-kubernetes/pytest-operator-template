@@ -7,6 +7,15 @@ import yaml
 import pytest
 
 
+def pytest_addoption(parser):
+    parser.addoption("--provider", action="store", default="machine")
+
+
+@pytest.fixture(scope="session")
+def provider(pytestconfig):
+    return pytestconfig.getoption("provider")
+
+
 @pytest.fixture(scope="session")
 def session_folder(tmp_path_factory):
     return tmp_path_factory.mktemp("session")
@@ -52,19 +61,19 @@ def charm_dir(session_folder):
 
 
 @pytest.fixture()
-def answers(pytestconfig):
+def answers(provider):
     """Default answers data for copier"""
     answers = {}
     answers["class_name"] = "TemplateTestCharm"
     # Note "TestCharm" can't be used, that's the name of the deafult unit test class
-    answers["charm_type"] = pytestconfig.getoption("-m")
+    answers["charm_type"] = provider
     return answers
 
 
 @pytest.fixture(scope="session", autouse=True)
-def set_metadata(charm_dir, pytestconfig, metadata):
+def set_metadata(charm_dir, provider, metadata):
     """Set the metadata for the charm type"""
-    if pytestconfig.getoption("-m") == "machine":
+    if provider == "machine":
         metadata.set_series(["focal"])
 
 

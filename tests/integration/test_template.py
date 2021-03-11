@@ -1,11 +1,9 @@
 import subprocess
 
 import copier
-import pytest
 
 
-@pytest.mark.machine
-class TestMachine:
+class TestTemplate:
     def test_pytest(self, src_template):
         """Check the fixtures"""
         assert src_template.exists()
@@ -61,7 +59,7 @@ class TestMachine:
         assert "unit-test" in jobs
         assert "integration-test" in jobs
 
-    def test_github_actions_provider(self, github_actions):
+    def test_github_actions_provider(self, github_actions, provider):
         """Verify the setup is for machines"""
         integration_test = github_actions["jobs"]["integration-test"]
         setup = None
@@ -69,7 +67,11 @@ class TestMachine:
             if step["name"] == "Setup operator environment":
                 setup = step
                 break
-        assert setup["with"]["provider"] == "lxd"
+        if provider == "container":
+            assert setup["with"]["provider"] == "microk8s"
+
+        else:
+            assert setup["with"]["provider"] == "lxd"
 
     def test_run_lint(self, charm_dir):
         """Try running the templated integration test"""
@@ -81,18 +83,4 @@ class TestMachine:
 
     def test_run_integration(self, charm_dir, metadata):
         """Try running the templated integration test"""
-        # metadata.set_series(["focal"])
         subprocess.check_call(["tox", "-e", "integration"], cwd=charm_dir)
-
-
-@pytest.mark.container
-class TestContainer(TestMachine):
-    def test_github_actions_provider(self, github_actions):
-        """Verify the setup is for containers"""
-        integration_test = github_actions["jobs"]["integration-test"]
-        setup = None
-        for step in integration_test["steps"]:
-            if step["name"] == "Setup operator environment":
-                setup = step
-                break
-        assert setup["with"]["provider"] == "microk8s"
