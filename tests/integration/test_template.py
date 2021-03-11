@@ -54,6 +54,23 @@ class TestMachine:
         contents = test_file.read_text()
         assert "class IntegrationTest" in contents
 
+    def test_github_actions_created(self, github_actions):
+        """Verify github_actions are created as expected"""
+        jobs = github_actions["jobs"]
+        assert "lint" in jobs
+        assert "unit-test" in jobs
+        assert "integration-test" in jobs
+
+    def test_github_actions_provider(self, github_actions):
+        """Verify the setup is for machines"""
+        integration_test = github_actions["jobs"]["integration-test"]
+        setup = None
+        for step in integration_test["steps"]:
+            if step["name"] == "Setup operator environment":
+                setup = step
+                break
+        assert setup["with"]["provider"] == "lxd"
+
     def test_run_lint(self, charm_dir):
         """Try running the templated integration test"""
         subprocess.check_call(["tox", "-e", "lint"], cwd=charm_dir)
@@ -70,4 +87,12 @@ class TestMachine:
 
 @pytest.mark.container
 class TestContainer(TestMachine):
-    pass
+    def test_github_actions_provider(self, github_actions):
+        """Verify the setup is for containers"""
+        integration_test = github_actions["jobs"]["integration-test"]
+        setup = None
+        for step in integration_test["steps"]:
+            if step["name"] == "Setup operator environment":
+                setup = step
+                break
+        assert setup["with"]["provider"] == "microk8s"

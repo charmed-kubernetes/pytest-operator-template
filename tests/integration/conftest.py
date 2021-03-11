@@ -83,3 +83,11 @@ def metadata(charm_dir):
 
     metadata = Metadata()
     return metadata
+
+
+@pytest.fixture(scope="session")
+def github_actions(charm_dir):
+    """Load the github actions"""
+    actions_file = charm_dir / ".github" / "workflows" / "tests.yaml"
+    actions = yaml.safe_load(actions_file.read_text())
+    return actions

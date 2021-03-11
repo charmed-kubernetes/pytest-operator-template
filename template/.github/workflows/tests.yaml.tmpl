@@ -1,4 +1,3 @@
-[% if _copier_answers["charm_type"] == "machine" %]
 name: Test Suite
 on: [pull_request]
 
@@ -40,7 +39,7 @@ jobs:
       - name: Run test
         run: tox -e unit
   integration-test:
-    name: Integration test with LXD
+    name: Integration tests
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -53,7 +52,14 @@ jobs:
         run: |
           pip install tox
       - name: Setup operator environment
+[%- if _copier_answers["charm_type"] == "machine" %]
         uses: charmed-kubernetes/actions-operator@master
+        with:
+            provider: lxd
+[%- elif _copier_answers["charm_type"] == "container" %]
+        uses: charmed-kubernetes/actions-operator@k8s
+        with:
+            provider: microk8s
+[%- endif %]
       - name: Run test
         run: tox -e integration
-[% endif %]
