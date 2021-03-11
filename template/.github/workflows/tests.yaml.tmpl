@@ -62,4 +62,8 @@ jobs:
             provider: microk8s
 [%- endif %]
       - name: Run test
-        run: tox -e integration
+[%- if _copier_answers["charm_type"] == "machine" %]
+        run: tox -e integration -- -m machine
+[%- elif _copier_answers["charm_type"] == "container" %]
+        run: tox -e integration -- -m container
+[%- endif %]
