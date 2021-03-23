@@ -1,0 +1,12 @@
+_subdirectory: template
+_tasks:
+    # Removed until charm.py sets a status
+    # - invoke migrate-test-charm
+    - invoke check-yaml
+    - "chmod +x src/charm.py"
+    - invoke remove-tasks
+_skip_if_exists:
+    - src/charm.py
+class_name:
+    type: str
+    help: "The class name for the charm, must be a valid python class name"
