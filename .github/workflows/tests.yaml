@@ -72,7 +72,7 @@ jobs:
           pip install tox
           sudo snap install charmcraft --beta
       - name: Setup operator environment
-        uses: charmed-kubernetes/actions-operator
+        uses: charmed-kubernetes/actions-operator@master
         with:
             provider: microk8s
       - name: Run test
