@@ -45,12 +45,12 @@ class TestTemplate:
         assert tox_original != tox_modified
         assert tox_original == tox_update
 
-    def test_integration_test_contents(self, charm_dir, answers):
-        """Verify the template is processed correctly"""
-        test_file = charm_dir / "tests" / "integration" / "test_charm.py"
-        assert test_file.exists()
-        contents = test_file.read_text()
-        assert "class IntegrationTest" in contents
+    # def test_integration_test_contents(self, charm_dir, answers):
+    #     """Verify the template is processed correctly"""
+    #     test_file = charm_dir / "tests" / "integration" / "test_charm.py"
+    #     assert test_file.exists()
+    #     contents = test_file.read_text()
+    #     assert "class IntegrationTest" in contents
 
     def test_github_actions_created(self, github_actions):
         """Verify github_actions are created as expected"""
