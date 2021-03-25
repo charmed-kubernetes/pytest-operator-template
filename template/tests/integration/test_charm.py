@@ -18,6 +18,6 @@ async def test_status(ops_test):
     metadata = Path("./metadata.yaml")
     charm_name = yaml.safe_load(metadata.read_text())["name"]
     assert (
-        ops_test.applications[charm_name].units[0].workload_status
+        ops_test.model.applications[charm_name].units[0].workload_status
         == "Active and running"
     )
