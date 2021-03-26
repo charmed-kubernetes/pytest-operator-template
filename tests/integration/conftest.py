@@ -7,6 +7,15 @@ import yaml
 import pytest
 
 
+def pytest_addoption(parser):
+    parser.addoption("--provider", action="store", default="machine")
+
+
+@pytest.fixture(scope="session")
+def provider(pytestconfig):
+    return pytestconfig.getoption("provider")
+
+
 @pytest.fixture(scope="session")
 def session_folder(tmp_path_factory):
     return tmp_path_factory.mktemp("session")
@@ -52,16 +61,23 @@ def charm_dir(session_folder):
 
 
 @pytest.fixture()
-def answers():
+def answers(provider):
     """Default answers data for copier"""
     answers = {}
-    # answers["charm_name"] = "template-test-charm"
     answers["class_name"] = "TemplateTestCharm"
     # Note "TestCharm" can't be used, that's the name of the deafult unit test class
+    answers["charm_type"] = provider
     return answers
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session", autouse=True)
+def set_metadata(charm_dir, provider, metadata):
+    """Set the metadata for the charm type"""
+    if provider == "machine":
+        metadata.set_series(["focal"])
+
+
+@pytest.fixture(scope="session")
 def metadata(charm_dir):
     """Access metadata for the test charm"""
 
@@ -76,3 +92,11 @@ def metadata(charm_dir):
 
     metadata = Metadata()
     return metadata
+
+
+@pytest.fixture(scope="session")
+def github_actions(charm_dir):
+    """Load the github actions"""
+    actions_file = charm_dir / ".github" / "workflows" / "tests.yaml"
+    actions = yaml.safe_load(actions_file.read_text())
+    return actions

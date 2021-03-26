@@ -23,7 +23,8 @@ def migrate_test_charm(c):
 def remove_tasks(c):
     """Removes the invoke tasks"""
     task = Path("tasks.py")
-    task.unlink()
+    if task.exists():
+        task.unlink()
 
 
 @task
@@ -45,3 +46,19 @@ def check_yaml(c):
                 if ":" in line:
                     line = line[1:]  # Remove the comment prefix
                 print(line, end="")
+
+
+@task
+def remove_unused_files(c):
+    """Remove files that aren't used form the standard template"""
+    files = []
+    run_tests = Path("run_tests")
+    files.append(run_tests)
+    requirements_dev = Path("requirements-dev.txt")
+    files.append(requirements_dev)
+    # This can be used and moved instead of deleted when using the upstream template
+    test_charm = Path("tests/test_charm.py")
+    files.append(test_charm)
+    for file in files:
+        if file.exists():
+            file.unlink()
