@@ -57,6 +57,13 @@ def charm_dir(session_folder):
     )
     shutil.copytree(tmp_dir, charm_dir)
     shutil.rmtree(tmp_dir)
+    subprocess.check_call(["git", "init"], cwd=charm_dir)
+    subprocess.check_call(
+        ["git", "config", "user.email", "pytest@example.com"], cwd=charm_dir
+    )
+    subprocess.check_call(["git", "config", "user.name", "Pytest"], cwd=charm_dir)
+    subprocess.check_call(["git", "add", "."], cwd=charm_dir)
+    subprocess.check_call(["git", "commit", "-m", "Initial commit"], cwd=charm_dir)
     return charm_dir
 
 
