@@ -3,7 +3,7 @@ _tasks:
     # Removed until charm.py sets a status
     # - invoke migrate-test-charm
     - invoke check-yaml
-    - "chmod +x src/charm.py"
+    - invoke charm-permissions
     - invoke remove-unused-files
     - invoke remove-tasks
 _skip_if_exists:

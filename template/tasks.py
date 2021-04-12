@@ -1,4 +1,5 @@
 import fileinput
+import os
 import subprocess
 from pathlib import Path
 
@@ -36,16 +37,24 @@ def black(c):
 @task
 def check_yaml(c):
     """If the yaml files are empty, uncomment the default examples"""
-    config_file = Path("config.yaml")
-    config = yaml.safe_load(config_file.read_text())
-    action_file = Path("actions.yaml")
-    actions = yaml.safe_load(action_file.read_text())
-    if not config and not actions:
-        with fileinput.input((action_file, config_file), inplace=1) as f:
+    for file_to_process in (Path("./config.yaml"), Path("./actions.yaml")):
+        if not file_to_process.exists():
+            continue
+        if yaml.safe_load(file_to_process.read_text()):
+            continue
+        with fileinput.input(file_to_process, inplace=1) as f:
             for line in f:
                 if ":" in line:
                     line = line[1:]  # Remove the comment prefix
                 print(line, end="")
+
+
+@task
+def charm_permissions(c):
+    """Make sure charm.py is executable"""
+    charm = Path("src/charm.py")
+    if charm.exists():
+        os.chmod(charm, 0o755)
 
 
 @task
