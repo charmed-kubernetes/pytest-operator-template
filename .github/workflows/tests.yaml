@@ -49,6 +49,9 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
+        # This step should be folded into actions-operator
+      - name: Install charmcraft
+        run: sudo snap install charmcraft
       - name: Setup operator environment
         uses: charmed-kubernetes/actions-operator@master
         with:
@@ -65,6 +68,9 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
+        # This step should be folded into actions-operator
+      - name: Install charmcraft
+        run: sudo snap install charmcraft
       - name: Setup operator environment
         uses: charmed-kubernetes/actions-operator@master
         with:
