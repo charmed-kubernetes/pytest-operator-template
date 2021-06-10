@@ -29,7 +29,7 @@ def src_template(session_folder):
     """
     cwd = Path(".")
     destination = session_folder / "src_template"
-    shutil.copytree(cwd, destination)
+    shutil.copytree(cwd, destination, ignore=shutil.ignore_patterns(".tox"))
     subprocess.check_call(
         ["git", "config", "user.email", "pytest@example.com"], cwd=destination
     )
