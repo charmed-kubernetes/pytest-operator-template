@@ -81,6 +81,6 @@ class TestTemplate:
         """Try running the templated integration test"""
         subprocess.check_call(["tox", "-e", "unit"], cwd=charm_dir)
 
-    def test_run_integration(self, charm_dir, metadata):
+    def test_run_integration(self, charm_dir):
         """Try running the templated integration test"""
         subprocess.check_call(["tox", "-e", "integration"], cwd=charm_dir)

@@ -52,18 +52,13 @@ jobs:
         run: |
           pip install tox
       - name: Setup operator environment
-[%- if _copier_answers["charm_type"] == "machine" %]
         uses: charmed-kubernetes/actions-operator@master
+[%- if _copier_answers["charm_type"] == "machine" %]
         with:
             provider: lxd
 [%- elif _copier_answers["charm_type"] == "container" %]
-        uses: charmed-kubernetes/actions-operator@k8s
         with:
             provider: microk8s
 [%- endif %]
       - name: Run test
-[%- if _copier_answers["charm_type"] == "machine" %]
-        run: tox -e integration -- -m machine
-[%- elif _copier_answers["charm_type"] == "container" %]
-        run: tox -e integration -- -m container
-[%- endif %]
+        run: tox -e integration

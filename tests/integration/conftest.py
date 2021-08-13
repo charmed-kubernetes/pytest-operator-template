@@ -29,7 +29,7 @@ def src_template(session_folder):
     """
     cwd = Path(".")
     destination = session_folder / "src_template"
-    shutil.copytree(cwd, destination)
+    shutil.copytree(cwd, destination, ignore=shutil.ignore_patterns(".tox"))
     subprocess.check_call(
         ["git", "config", "user.email", "pytest@example.com"], cwd=destination
     )
@@ -71,27 +71,15 @@ def answers(provider):
 
 
 @pytest.fixture(scope="session", autouse=True)
-def set_metadata(charm_dir, provider, metadata):
-    """Set the metadata for the charm type"""
+def modify_metadata(charm_dir, provider):
+    """Modify the metadata based on the charm type"""
     if provider == "machine":
-        metadata.set_series(["focal"])
-
-
-@pytest.fixture(scope="session")
-def metadata(charm_dir):
-    """Access metadata for the test charm"""
-
-    class Metadata:
         metadata_file = charm_dir / "metadata.yaml"
         metadata = yaml.safe_load(metadata_file.read_text())
-
-        def set_series(self, series):
-            """Set the series in the metadata"""
-            self.metadata["series"] = series
-            self.metadata_file.write_text(yaml.dump(self.metadata))
-
-    metadata = Metadata()
-    return metadata
+        metadata["series"] = ["focal"]
+        del metadata["containers"]
+        del metadata["resources"]
+        metadata_file.write_text(yaml.dump(metadata))
 
 
 @pytest.fixture(scope="session")

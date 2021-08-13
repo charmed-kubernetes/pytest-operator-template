@@ -49,12 +49,13 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
-      - name: Install Dependencies
-        run: |
-          pip install tox
-          sudo snap install charmcraft --beta
+        # This step should be folded into actions-operator
+      - name: Install charmcraft
+        run: sudo snap install charmcraft
       - name: Setup operator environment
         uses: charmed-kubernetes/actions-operator@master
+        with:
+          provider: lxd
       - name: Run test
         run: tox -e integration -- --provider machine
   integration-test-container:
@@ -67,13 +68,12 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
-      - name: Install Dependencies
-        run: |
-          pip install tox
-          sudo snap install charmcraft --beta
+        # This step should be folded into actions-operator
+      - name: Install charmcraft
+        run: sudo snap install charmcraft
       - name: Setup operator environment
         uses: charmed-kubernetes/actions-operator@master
         with:
-            provider: microk8s
+          provider: microk8s
       - name: Run test
         run: tox -e integration -- --provider container
